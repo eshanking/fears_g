@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from fears.utils import results_manager
+from fears_g.utils import results_manager
 import pickle
 import lifelines
 

@@ -7,7 +7,7 @@ Classes:
 import numpy as np
 import math
 from importlib_resources import files
-from fears.utils import dir_manager, pharm, fitness, plotter, AutoRate
+from fears_g.utils import dir_manager, pharm, fitness, plotter, AutoRate
 import pandas as pd
 
 class PopParams:

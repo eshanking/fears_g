@@ -3,7 +3,7 @@ import numpy as np
 # Methods for generating drug curves
 
 # Equation for a simple 1 compartment pharmacokinetic model
-def pharm_eqn(pop,t,k_elim=None,k_abs=None,max_dose=None):
+def pharm_eqn(pop,t,k_elim=None,k_abs=None,max_conc=None):
     """One-compartment pharmacokinetic model
 
     Args:
@@ -13,7 +13,7 @@ def pharm_eqn(pop,t,k_elim=None,k_abs=None,max_dose=None):
         gets data from population object. Defaults to None.
         k_abs (float, optional): Absorption rate constant. If None,
         gets data from population object. Defaults to None.
-        max_dose (float, optional): Max serum drug concentration. If None,
+        max_conc (float, optional): Max serum drug concentration. If None,
         gets data from population object. Defaults to None.
 
     Returns:
@@ -23,27 +23,27 @@ def pharm_eqn(pop,t,k_elim=None,k_abs=None,max_dose=None):
         k_elim = pop.k_elim
     if k_abs is None:
         k_abs = pop.k_abs
-    if max_dose is None:
-        max_dose = pop.max_dose
+    if max_conc is None:
+        max_conc = pop.max_conc
     
     k_elim = k_elim*pop.timestep_scale
     k_abs = k_abs*pop.timestep_scale
     
     if k_elim == 0:
         conc = 1 - np.exp(-k_abs*t)
-        conc = conc*max_dose
+        conc = conc*max_conc
     else:
         conc = np.exp(-k_elim*t)-np.exp(-k_abs*t) 
         t_max = np.log(k_elim/k_abs)/(k_elim-k_abs)
         conc = conc/(np.exp(-k_elim*t_max)-np.exp(-k_abs*t_max))
-        conc = conc*max_dose
+        conc = conc*max_conc
     return conc
 
 # Convolve dose regimen u with pharmacokinetic model
 def convolve_pharm(pop,u):
                    # k_elim=0.01,
                    # k_abs=0.1,
-                   # max_dose=1):
+                   # max_conc=1):
     """Models serum drug concentration of a patient undergoing a drug regimen.
 
     Convolves an impulse train (u) with a 1-compartment pharmacokinetic model.
@@ -58,11 +58,11 @@ def convolve_pharm(pop,u):
     """
     k_elim = pop.k_elim
     k_abs = pop.k_abs
-    max_dose = pop.max_dose
+    max_conc = pop.max_conc
     
     pharm = np.zeros(pop.n_timestep)
     for i in range(pop.n_timestep):
-        pharm[i] = pop.pharm_eqn(i,k_elim=k_elim,k_abs=k_abs,max_dose=max_dose)
+        pharm[i] = pop.pharm_eqn(i,k_elim=k_elim,k_abs=k_abs,max_conc=max_conc)
     
     conv = np.convolve(u,pharm)
     conv = conv[0:pop.n_timestep]
@@ -131,7 +131,7 @@ def gen_on_off_regimen(pop,duty_cycle=None):
         if i == off_time:
             on = False
         if on:
-            u[i] = pop.max_dose
+            u[i] = pop.max_conc
     return u
 
 # generates drug concentration curves
@@ -152,31 +152,31 @@ def gen_curves(pop):
         # cur_dose = 0
         for i in range(pop.n_timestep):
             # if i <= pop.steepness:
-            #     slope = (pop.max_dose-10**(-3))/pop.steepness
+            #     slope = (pop.max_conc-10**(-3))/pop.steepness
             #     conc = slope*i+10**-3
             # else:
             #     # step = pop.steepness
-            #     slope = (pop.max_dose-10**(-3))/pop.steepness
-            # if cur_dose < pop.max_dose:
+            #     slope = (pop.max_conc-10**(-3))/pop.steepness
+            # if cur_dose < pop.max_conc:
             conc = pop.slope*i*pop.timestep_scale
             
-            if conc > pop.max_dose:
-                conc=pop.max_dose
+            if conc > pop.max_conc:
+                conc=pop.max_conc
             # else:
-            #     conc = pop.max_dose
+            #     conc = pop.max_conc
             # cur_dose = conc
                 # conc = slope*i+10**-3
             curve[i]=conc
             
     elif pop.curve_type == 'constant':
-        curve[:] = pop.max_dose
+        curve[:] = pop.max_conc
 
     elif pop.curve_type == 'heaviside':
         for i in range(pop.n_timestep):
             if i <= pop.h_step:
                 curve[i] = pop.min_dose
             else:
-                curve[i] = pop.max_dose 
+                curve[i] = pop.max_conc 
     
     # Two compartment pharmacokinetic model
     elif pop.curve_type == 'pharm':

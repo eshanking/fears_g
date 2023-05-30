@@ -1,6 +1,6 @@
 import pytest
-from fears.utils.pharm import *
-from fears.population import Population, PopParams
+from fears_g.utils.pharm import *
+from fears_g.population import Population, PopParams
 
 @pytest.fixture
 def pop():

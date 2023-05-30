@@ -1,5 +1,5 @@
-from fears.population import Population
-from fears.utils import fitness,plotter
+from fears_g.population import Population
+from fears_g.utils import fitness,plotter
 
 p = Population(fitness_data='from_file')
 

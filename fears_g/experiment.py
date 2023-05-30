@@ -1,5 +1,5 @@
-from fears.population import Population
-from fears.utils import plotter, dir_manager, stats
+from fears_g.population import Population
+from fears_g.utils import plotter, dir_manager, stats
 import numpy as np
 import pandas as pd
 import os

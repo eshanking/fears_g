@@ -3,13 +3,13 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='fears', 
+    name='fears_g', 
     version='0.1.0', 
     author = 'Eshan King', 
     author_email = '',
     # packages=['autorate', "autorate.test", "autorate.test.data"], 
     # pacakges=['fears','fears.data','fears.utils'],
-    packages=find_packages(include=['fears','fears.population','fears.data','fears.utils','fears.utils.*']),
+    packages=find_packages(include=['fears_g','fears_g.population','fears_g.data','fears_g.utils','fears_g.utils.*']),
     # packages=find_packages(where="fears"),
     install_requires = [
       "pandas",

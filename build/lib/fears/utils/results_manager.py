@@ -1,7 +1,7 @@
 import os
 import pickle
 import pandas as pd
-from fears.utils import dir_manager
+from fears_g.utils import dir_manager
 # from fears.classes.experiment_class import Experiment
 
 def get_experiment_results(suffix=None,exp=None):

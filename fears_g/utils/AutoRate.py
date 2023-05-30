@@ -6,7 +6,7 @@ import scipy.interpolate as sciinter
 import matplotlib.pyplot as plt
 import numpy as np
 from functools import partial
-from fears.utils.plotter import gen_color_cycler
+from fears_g.utils.plotter import gen_color_cycler
 import datetime
 
 class Experiment():

@@ -6,7 +6,7 @@ import numpy as np
 # import os
 import math
 import scipy.stats
-from fears.utils import fitness
+from fears_g.utils import fitness
 from matplotlib.collections import LineCollection
 from matplotlib.patches import Polygon
 import networkx as nx

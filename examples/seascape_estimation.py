@@ -1,4 +1,4 @@
-from fears.population import Population
+from fears_g.population import Population
 
 p1 = Population(fitness_data='estimate')
 

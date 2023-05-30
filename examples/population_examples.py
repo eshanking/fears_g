@@ -1,4 +1,4 @@
-from fears.population import Population
+from fears_g.population import Population
 
 #%% Default data from Ogbunugafor 2016 (engineered S. cerevisiae subject to pyrimethamine)
 p = Population(drug_units = 'uM')

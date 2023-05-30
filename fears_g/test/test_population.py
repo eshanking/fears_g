@@ -1,4 +1,4 @@
-from fears.population import Population, PopParams
+from fears_g.population import Population, PopParams
 import pytest
 
 @pytest.fixture
