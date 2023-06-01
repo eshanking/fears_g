@@ -8,7 +8,10 @@ class Population:
     def __init__(self,dr_params=None,game_params=None,carrying_cap=10**6,
                  passage=False,passage_time=24,dilution=40,constant_pop=False,
                  n_timestep=240,init_counts=None,curve_type='constant',
-                 max_conc=1,n_sims=10,debug=False,death_rate=0,legend_labels=None):
+                 max_conc=1,n_sims=10,debug=False,death_rate=0,
+                 legend_labels=None,drug_curve=None,time_varying_game=False,
+                 time_varying_game_params=None):
+        
         if game_params is None:
             game_params = []
             game_params.append([-0.078,0.00823]) # alpha, beta
@@ -40,12 +43,20 @@ class Population:
         self.debug = debug
         self.death_rate = death_rate
         self.fitness_timecourse = np.zeros((self.n_timestep,self.n_genotype))
+        self.time_varying_game = time_varying_game
+        self.time_varying_game_params = time_varying_game_params
         
         if legend_labels is None:
             self.legend_labels = ['Sensitive','Resistant']
             
+        if drug_curve is None:
+            self.initialize_drug_curve()
+        else:
+            self.drug_curve = drug_curve
 
-        self.initialize_drug_curve()
+    def set_game(self,timestep):
+        if self.time_varying_game:
+            self.game_params = self.time_varying_game_params[timestep]
 
     def initialize_drug_curve(self):
         curve,u = pharm.gen_curves(self)
@@ -116,6 +127,8 @@ class Population:
         return counts
     
     def abm(self,mm,counts):
+        
+        self.set_game(mm)
         
         conc = self.drug_curve[mm]
             
@@ -249,6 +262,7 @@ class Population:
         ax.legend(frameon=False)
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
+        return fig,ax
 
 
 
